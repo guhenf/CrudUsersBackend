@@ -34,7 +34,7 @@ describe('Testes rota POST /users', () => {
 		expect(response.body).toHaveProperty('email')
 		expect(response.body).toHaveProperty('createdOn')
 		expect(response.body).toHaveProperty('updatedOn')
-		expect(response.body).toHaveProperty('uuid')
+		expect(response.body).toHaveProperty('id')
 		expect(response.body).toHaveProperty('isAdm')
 		expect(response.body).not.toHaveProperty('password')
 	})
@@ -107,7 +107,7 @@ describe('Testando rota GET /users/profile', () => {
 			.get('/users/profile')
 			.set('Authorization', `Bearer ${token}`)
 
-		expect(response.body).toHaveProperty('uuid')
+		expect(response.body).toHaveProperty('id')
 		expect(response.body).toHaveProperty('createdOn')
 		expect(response.body).toHaveProperty('updatedOn')
 		expect(response.body).toHaveProperty('name')
@@ -134,7 +134,7 @@ const updateAdm = {
 	email: 'gustavo@crud.com',
 }
 
-describe('Testando rota PATCH /users/<uuid>', () => {
+describe('Testando rota PATCH /users/<id>', () => {
 	it('Testando atualização sem token', async () => {
 		const login = await request(app).post('/login').send(loginNotAdm)
 		const { token } = login.body
@@ -143,7 +143,7 @@ describe('Testando rota PATCH /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${token}`)
 
 		const response = await request(app)
-			.patch(`/users/${user.body.uuid}`)
+			.patch(`/users/${user.body.id}`)
 			.send(updateNotAdm)
 
 		expect(response.status).toBe(401)
@@ -158,12 +158,12 @@ describe('Testando rota PATCH /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${token}`)
 
 		const response = await request(app)
-			.patch(`/users/${user.body.uuid}`)
+			.patch(`/users/${user.body.id}`)
 			.send(updateNotAdm)
 			.set('Authorization', `Bearer ${token}`)
 		console.log(response.body)
 
-		expect(response.body).toHaveProperty('uuid')
+		expect(response.body).toHaveProperty('id')
 		expect(response.body).toHaveProperty('createdOn')
 		expect(response.body).toHaveProperty('updatedOn')
 		expect(response.body).toHaveProperty('name', updateNotAdm.name)
@@ -183,7 +183,7 @@ describe('Testando rota PATCH /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${tokenAdm}`)
 
 		const response = await request(app)
-			.patch(`/users/${adm.body.uuid}`)
+			.patch(`/users/${adm.body.id}`)
 			.send(updateAdm)
 			.set('Authorization', `Bearer ${tokenNotAdm}`)
 
@@ -202,7 +202,7 @@ describe('Testando rota PATCH /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${tokenNotAdm}`)
 
 		const response = await request(app)
-			.patch(`/users/${notAdm.body.uuid}`)
+			.patch(`/users/${notAdm.body.id}`)
 			.send({ name: 'Rafael Kenzie' })
 			.set('Authorization', `Bearer ${tokenAdm}`)
 
@@ -210,7 +210,7 @@ describe('Testando rota PATCH /users/<uuid>', () => {
 	})
 })
 
-describe('Testando rota DELETE /users/<uuid>', () => {
+describe('Testando rota DELETE /users/<id>', () => {
 	it('Testando deleção sem token', async () => {
 		const login = await request(app).post('/login').send(loginAdm)
 		const { token } = login.body
@@ -218,7 +218,7 @@ describe('Testando rota DELETE /users/<uuid>', () => {
 			.get('/users/profile')
 			.set('Authorization', `Bearer ${token}`)
 
-		const response = await request(app).delete(`/users/${user.body.uuid}`)
+		const response = await request(app).delete(`/users/${user.body.id}`)
 
 		expect(response.status).toBe(401)
 		expect(response.body).toHaveProperty('message')
@@ -235,7 +235,7 @@ describe('Testando rota DELETE /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${tokenAdm}`)
 
 		const response = await request(app)
-			.delete(`/users/${adm.body.uuid}`)
+			.delete(`/users/${adm.body.id}`)
 			.set('Authorization', `Bearer ${tokenNotAdm}`)
 
 		expect(response.status).toBe(401)
@@ -253,7 +253,7 @@ describe('Testando rota DELETE /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${tokenNotAdm}`)
 
 		const response = await request(app)
-			.delete(`/users/${notAdm.body.uuid}`)
+			.delete(`/users/${notAdm.body.id}`)
 			.set('Authorization', `Bearer ${tokenAdm}`)
 
 		expect(response.body).toHaveProperty('message')
@@ -267,7 +267,7 @@ describe('Testando rota DELETE /users/<uuid>', () => {
 			.set('Authorization', `Bearer ${token}`)
 
 		const response = await request(app)
-			.delete(`/users/${user.body.uuid}`)
+			.delete(`/users/${user.body.id}`)
 			.set('Authorization', `Bearer ${token}`)
 
 		expect(response.body).toHaveProperty('message')
