@@ -61,9 +61,11 @@ export const loggedUserController = async (req, res) => {
 
 export const deleteUserController = async (req, res) => {
 	const { id } = req.params
-	const { name } = req.body
+	const user = usersDatabase.find((user) => user.id === id)
 	await deleteUserService(id)
-	return res.status(200).json({ message: `User ${name} deleted with sucess` })
+	return res
+		.status(200)
+		.json({ message: `User ${user.name} deleted with sucess` })
 }
 
 export const updateUserController = async (req, res) => {
